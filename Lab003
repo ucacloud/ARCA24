@@ -58,6 +58,15 @@ const salvageVINs = [
   '935f8245-8816-42cf-9ea6-594286e3df0d',
 ];
 
+// 2.  Order each new Make array by vehicle year in ascending order
+vehicles.sort((v1, v2) => {
+  if (v1.year > v2.year) {
+    return 1;
+  } else {
+    return -1;
+  }
+});
+
 // 1.  Create new arrays for each "Make" of vehicle.
 //     a.  Each new array should only contain vehicles of the same make and the array variable should be named appropriately (EG: teslaVehicles)
 
@@ -70,15 +79,6 @@ for (const vehicle of vehicles) {
     grouped[vehicle.make] = [vehicle];
   }
 }
-
-// 2.  Order each new Make array by vehicle year in ascending order
-vehicles.sort((v1, v2) => {
-  if (v1.year > v2.year) {
-    return 1;
-  } else {
-    return -1;
-  }
-});
 
 // 3.  Add recall reason from the recallList to each vehicle (based on VIN) as "recallReason"
 const vehicleWithRecall = vehicles.map((vehicle) => {
