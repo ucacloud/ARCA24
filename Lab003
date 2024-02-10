@@ -93,17 +93,15 @@ const vehicleWithRecall = vehicles.map((vehicle) => {
 });
 
 // 4.  Remove any vehicles that have a salvage title (based on VIN)
-// get length of array for iteration
 let arr = vehicles.length;
-
-// iterate from end to start to avoid skipping index after removing an element
 while (arr--) {
-  // check elemnt present in the array
   if (salvageVINs.some((salvage) => salvage === vehicles[arr].vin))
-    // remove the element
     vehicles.splice(arr, 1);
 }
+
 //console.log(vehicles);
+
+console.log(grouped);
 
 /*
 vehicles.forEach((vehicle) => {
@@ -111,5 +109,3 @@ vehicles.forEach((vehicle) => {
 \t${vehicle.model}, ${vehicle.year}, ${vehicle.vin}, ${vehicle.recallReason || 'N/A'}`);
 });
 */
-
-console.log(grouped);
