@@ -1,13 +1,5 @@
 // Lab requirements (applied in any order you choose):
 
-// 5.  Output each Make array to the console, ordered by year (from step 2), with recall details included (from step 3), and all salvaged vehicles removed (from step 4)
-// 6.  Step 5 should be in an easy to read format - use new lines and tabs for formatting
-// 7.  Output the following stats :
-//    a.  Total number of vehicles you started with
-//    b.  Total number of non-salvage vehicles of each Make
-//    c.  Total number of vehicles that were removed due to salvage
-//    d.  Total number of non-salvage vehicles of each year model, regardless of Make.
-//
 // Restriction : Do not hardcode your array names like "const teslaVehicles" - assume the vehicle list contains an unknown number of makes and generate the variable names dynamically
 
 // TODO : START YOUR CODE HERE
@@ -58,6 +50,9 @@ const salvageVINs = [
   '935f8245-8816-42cf-9ea6-594286e3df0d',
 ];
 
+vehiclesProcessed = vehicles.length; // total number of vehicles
+vehicleSalvageLength = vehicles.length; // variable to be used to find total salvaged removed
+
 // 2.  Order each new Make array by vehicle year in ascending order
 vehicles.sort((v1, v2) => {
   if (v1.year > v2.year) {
@@ -67,10 +62,19 @@ vehicles.sort((v1, v2) => {
   }
 });
 
+// 4.  Remove any vehicles that have a salvage title (based on VIN)
+let arr = vehicles.length; // get length of array for iteration
+while (arr--) { // iterate from end to start to avoid skipping index after removing an element
+    if (salvageVINs.some((salvage) => salvage === vehicles[arr].vin)) // check elemnt present in the array
+      vehicles.splice(arr, 1);   // remove the element
+}
+
+vehiclesSalvaged = vehicleSalvageLength - vehicles.length; //Total salvaged removed
+
 // 1.  Create new arrays for each "Make" of vehicle.
 //     a.  Each new array should only contain vehicles of the same make and the array variable should be named appropriately (EG: teslaVehicles)
 
-const grouped = {};
+const grouped = {}; // group all makes together
 
 for (const vehicle of vehicles) {
   if (grouped[vehicle.make]) {
@@ -78,7 +82,17 @@ for (const vehicle of vehicles) {
   } else {
     grouped[vehicle.make] = [vehicle];
   }
-}
+};
+
+const groupedYear = {}; //group all years together
+
+for (const vehicle of vehicles) {
+  if (groupedYear[vehicle.year]) {
+    groupedYear[vehicle.year].push(vehicle);
+  } else {
+    groupedYear[vehicle.year] = [vehicle];
+  }
+};
 
 // 3.  Add recall reason from the recallList to each vehicle (based on VIN) as "recallReason"
 const vehicleWithRecall = vehicles.map((vehicle) => {
@@ -92,20 +106,26 @@ const vehicleWithRecall = vehicles.map((vehicle) => {
   return vehicle;
 });
 
-// 4.  Remove any vehicles that have a salvage title (based on VIN)
-let arr = vehicles.length;
-while (arr--) {
-  if (salvageVINs.some((salvage) => salvage === vehicles[arr].vin))
-    vehicles.splice(arr, 1);
-}
-
-//console.log(vehicles);
-
-console.log(grouped);
-
-/*
+// 5.  Output each Make array to the console, ordered by year (from step 2), with recall details included (from step 3), and all salvaged vehicles removed (from step 4)
+// 6.  Step 5 should be in an easy to read format - use new lines and tabs for formatting
 vehicles.forEach((vehicle) => {
  console.log(`${vehicle.make} (Model, Year, Vin, Recall Reason)
 \t${vehicle.model}, ${vehicle.year}, ${vehicle.vin}, ${vehicle.recallReason || 'N/A'}`);
 });
-*/
+
+
+// 7.  Output the following stats :
+//    a.  Total number of vehicles you started with
+//    b.  Total number of non-salvage vehicles of each Make
+//    c.  Total number of vehicles that were removed due to salvage
+//    d.  Total number of non-salvage vehicles of each year model, regardless of Make.
+console.log(`\nTotal number of vehicles processed: ${vehiclesProcessed}`)
+console.log('Total (non-salvage) number of each make')
+Object.keys(grouped).forEach((vehicle) => {
+  console.log(`\t${vehicle}'s : ${grouped[vehicle].length}`); 
+});
+console.log(`Total number of vehicles removed due to salvage: ${vehiclesSalvaged}`);
+console.log(`Total (non-salvage) number of each year :`)
+Object.keys(groupedYear).forEach((vehicle) => {
+  console.log(`\t${vehicle}'s : ${groupedYear[vehicle].length}`); 
+});
